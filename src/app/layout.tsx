@@ -19,17 +19,14 @@ export const metadata: Metadata = {
     template: '%s | Classic Catering Uganda',
   },
   description:
-    'ISO 45001:2018 certified culinary training and premium catering services in Uganda. We offer professional baking courses, chef training, and catering for weddings and corporate events.',
+    'ISO certified culinary training and premium catering services in Uganda. Professional baking, chef training, and event catering.',
   keywords: [
-    'catering services Uganda',
+    'catering Uganda',
     'culinary training Kampala',
-    'professional baking courses',
-    'chef training Uganda',
-    'wedding catering Kampala',
-    'corporate catering Uganda',
+    'baking courses',
+    'chef training',
+    'wedding catering',
     'Classic Catering Uganda',
-    'baking school Kampala',
-    'hospitality training Uganda',
   ],
   authors: [{ name: 'Classic Baking & Catering Uganda' }],
   alternates: {
@@ -42,10 +39,10 @@ export const metadata: Metadata = {
     siteName: 'Classic Catering Uganda',
     title: 'Classic Baking & Catering Uganda | Culinary Excellence',
     description:
-      'ISO 45001:2018 certified culinary training and premium catering services in Uganda. Join our professional courses or book us for your event.',
+      'Professional culinary courses and premium catering in Uganda. Join us today.',
     images: [
       {
-        url: '/og-image.jpg', // Make sure this exists or I will need to generate/check it
+        url: '/images/cla47jpgc.jpg',
         width: 1200,
         height: 630,
         alt: 'Classic Baking & Catering Uganda',
@@ -54,21 +51,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Classic Baking & Catering Uganda | Culinary Excellence',
-    description:
-      'Professional culinary training and premium catering services in Uganda.',
-    images: ['/og-image.jpg'],
+    title: 'Classic Baking & Catering Uganda',
+    description: 'Professional culinary training and premium catering services in Uganda.',
+    images: ['/images/cla47jpgc.jpg'],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
   verification: {
     google: 'your-google-verification-code', // Placeholder, user might provide later

@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Training & Courses - Classic Baking & Catering Uganda',
-    description:
-        'Professional culinary training programs — diplomas, certificates, short courses & barista training. Practical, industry-oriented programs for all skill levels.',
+    title: 'Training & Courses',
+    description: 'Professional culinary training programs and short courses at Classic Catering Uganda.',
 };
 
 export default function CoursesLayout({

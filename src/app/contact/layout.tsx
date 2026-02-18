@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Contact Us | Book Your Catering or Culinary Course',
-    description:
-        'Have questions? Reach out to Classic Baking & Catering Uganda for bookings, course inquiries, and business consultations in Kampala. We are here to help.',
+    title: 'Contact Us',
+    description: 'Get in touch with Classic Baking & Catering Uganda for bookings and inquiries.',
 };
 
 export default function ContactLayout({
