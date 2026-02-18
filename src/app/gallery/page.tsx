@@ -5,9 +5,9 @@ import GalleryGrid from '@/components/GalleryGrid';
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: 'Gallery',
+  title: 'Gallery | Culinary Creations & Event Highlights',
   description:
-    'Explore our gallery showcasing culinary creations, catering events, training sessions, and more at Classic Catering Uganda.',
+    'Browse our gallery of stunning wedding cakes, gourmet catering events, and hands-on culinary training sessions at Classic Catering Uganda.',
 };
 
 const galleryCategories = [

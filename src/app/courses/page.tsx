@@ -1,18 +1,70 @@
-import type { Metadata } from 'next';
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import SectionHeader from '@/components/SectionHeader';
 import { Button } from '@/components/ui/button';
+import ApplyModal from '@/components/ApplyModal';
 
-export const metadata: Metadata = {
-  title: 'Training & Courses - Classic Baking & Catering Uganda',
-  description:
-    'Professional culinary training programs — diplomas, certificates, short courses & barista training. Practical, industry-oriented programs for all skill levels.',
+const FAQSchema = () => {
+  const questions = [
+    {
+      question: 'What are the entry requirements?',
+      answer: 'Our programs are open to anyone with a passion for culinary arts. No prior experience is required for most courses. You must be at least 16 years old.',
+    },
+    {
+      question: 'Do you offer payment plans?',
+      answer: 'Yes, we offer flexible payment plans for all our professional programs. You can pay in 2-3 installments spread across the course duration.',
+    },
+    {
+      question: 'Will I receive a certificate?',
+      answer: 'Yes, all graduates receive a certificate upon successful completion of their program. Our certificates are recognized by employers across Uganda and the region.',
+    },
+    {
+      question: 'Do you provide job placement assistance?',
+      answer: 'Absolutely! We have partnerships with hotels, restaurants, and catering companies. Our career services team helps graduates with job placements and interview preparation.',
+    },
+  ];
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: questions.map((q) => ({
+      '@type': 'Question',
+      name: q.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: q.answer,
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
 };
 
 export default function CoursesPage() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState('');
+
+  const handleApply = (courseName: string) => {
+    setSelectedCourse(courseName);
+    setModalOpen(true);
+  };
+
   return (
     <>
+      <FAQSchema />
+      <ApplyModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        courseName={selectedCourse}
+      />
       <PageHeader
         title="Training & Courses"
         description="Practical, industry-oriented culinary training for home cooks, aspiring chefs, entrepreneurs, and career-focused professionals."
@@ -88,7 +140,11 @@ export default function CoursesPage() {
                     <p className="text-2xl sm:text-3xl font-bold text-slate-800">UGX 1,500,000</p>
                     <p className="text-xs text-slate-500 mt-1">Installment plans available</p>
                   </div>
-                  <Button href="/contact?course=diploma" variant="primary" size="md">
+                  <Button
+                    onClick={() => handleApply('Diploma in Culinary Arts')}
+                    variant="primary"
+                    size="md"
+                  >
                     Apply Now
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -150,7 +206,11 @@ export default function CoursesPage() {
                     <p className="text-2xl sm:text-3xl font-bold text-slate-800">UGX 800,000</p>
                     <p className="text-xs text-slate-500 mt-1">Installment plans available</p>
                   </div>
-                  <Button href="/contact?course=certificate" variant="primary" size="md">
+                  <Button
+                    onClick={() => handleApply('Certificate in Culinary Arts')}
+                    variant="primary"
+                    size="md"
+                  >
                     Apply Now
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -233,9 +293,13 @@ export default function CoursesPage() {
                       <td className="px-3 sm:px-6 py-4 text-sm text-slate-600">{row.time}</td>
                       <td className="px-3 sm:px-6 py-4 font-semibold text-slate-800">{row.fees}</td>
                       <td className="px-3 sm:px-6 py-4 text-right">
-                        <Link href="/contact?course=short" className="text-red-700 font-semibold text-sm hover:text-red-800 transition-colors">
+                        <Button
+                          onClick={() => handleApply(row.course)}
+                          variant="ghost"
+                          className="p-0 text-red-700 font-semibold text-sm hover:text-red-800 transition-colors"
+                        >
                           Enroll &rarr;
-                        </Link>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -280,9 +344,13 @@ export default function CoursesPage() {
                       <td className="px-3 sm:px-6 py-4 text-sm text-slate-600">{row.time}</td>
                       <td className="px-3 sm:px-6 py-4 font-semibold text-slate-800">{row.fees}</td>
                       <td className="px-3 sm:px-6 py-4 text-right">
-                        <Link href="/contact?course=short" className="text-red-700 font-semibold text-sm hover:text-red-800 transition-colors">
+                        <Button
+                          onClick={() => handleApply(row.course)}
+                          variant="ghost"
+                          className="p-0 text-red-700 font-semibold text-sm hover:text-red-800 transition-colors"
+                        >
                           Enroll &rarr;
-                        </Link>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -327,9 +395,13 @@ export default function CoursesPage() {
                         <td className="px-3 sm:px-6 py-4 text-sm text-slate-600">{row.mode}</td>
                         <td className="px-3 sm:px-6 py-4 font-semibold text-slate-800">{row.fees}</td>
                         <td className="px-3 sm:px-6 py-4 text-right">
-                          <Link href="/contact?course=barista" className="text-red-700 font-semibold text-sm hover:text-red-800 transition-colors">
+                          <Button
+                            onClick={() => handleApply(row.course)}
+                            variant="ghost"
+                            className="p-0 text-red-700 font-semibold text-sm hover:text-red-800 transition-colors"
+                          >
                             Enroll &rarr;
-                          </Link>
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -360,7 +432,12 @@ export default function CoursesPage() {
                 ))}
               </div>
               <div className="mt-8">
-                <Button href="/contact?course=barista" variant="primary" size="md">
+                <Button
+                  onClick={() => handleApply('Barista Training')}
+                  variant="primary"
+                  size="lg"
+                  className="bg-white text-red-700 hover:bg-red-50"
+                >
                   Enroll for Barista Training
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -375,11 +452,6 @@ export default function CoursesPage() {
       {/* Why Choose Our Training */}
       <section className="py-20 bg-white rings-top-right">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="section-divider mb-10">
-            <svg className="w-6 h-6 text-red-700" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-            </svg>
-          </div>
           <SectionHeader
             subtitle="Our Advantage"
             title="Why Choose Our Culinary Training?"
@@ -424,80 +496,13 @@ export default function CoursesPage() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button href="/contact?course=apply" variant="secondary" size="md">
-                Apply Now
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+              <Button
+                onClick={() => handleApply('General Course Inquiry')}
+                variant="secondary"
+                size="md"
+              >
+                Inquire Now
               </Button>
-              <a
-                href="https://wa.me/256777682834"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-full transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                </svg>
-                WhatsApp Us
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Registration & Payment Info */}
-      <section className="py-20 bg-cream-dark pattern-overlay">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <SectionHeader
-            subtitle="Enrollment Info"
-            title="Registration & Payment"
-            description="Everything you need to know about enrolling in our programs."
-          />
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {/* Registration Fee */}
-            <div className="premium-card p-6 text-center">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-800 mb-1">Registration Fee</h3>
-              <p className="text-2xl font-bold text-red-700 mb-1">UGX 50,000</p>
-              <p className="text-xs text-slate-500">Non-refundable</p>
-            </div>
-
-            {/* Payment Methods */}
-            <div className="premium-card p-6 text-center">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-800 mb-3">Payment Methods</h3>
-              <div className="space-y-1.5 text-sm text-slate-600">
-                <p>Cash</p>
-                <p>Mobile Money</p>
-                <p>Bank Transfer</p>
-              </div>
-            </div>
-
-            {/* Installment Plans */}
-            <div className="premium-card p-6 text-center">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mx-auto mb-4 shadow-lg">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="font-bold text-slate-800 mb-3">Installment Plans</h3>
-              <p className="text-sm text-slate-600 mb-3">Flexible payment plans available for all professional programs.</p>
-              <a
-                href="https://wa.me/256777682834"
-                className="text-red-700 font-semibold text-sm hover:text-red-800 transition-colors"
-              >
-                Contact for details &rarr;
-              </a>
             </div>
           </div>
         </div>
@@ -529,10 +534,6 @@ export default function CoursesPage() {
                 question: 'Do you provide job placement assistance?',
                 answer: 'Absolutely! We have partnerships with hotels, restaurants, and catering companies. Our career services team helps graduates with job placements and interview preparation.',
               },
-              {
-                question: 'Can I visit the facility before enrolling?',
-                answer: 'Yes, we welcome prospective students to tour our facilities. Contact us to schedule a visit and meet our instructors.',
-              },
             ].map((faq, index) => (
               <details key={index} className="group premium-card overflow-hidden">
                 <summary className="flex items-center justify-between p-6 cursor-pointer list-none hover:bg-cream transition-colors">
@@ -548,44 +549,6 @@ export default function CoursesPage() {
                 </div>
               </details>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-red-950 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-700/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-96 h-96 bg-red-700/10 rounded-full blur-3xl" />
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Start Your Culinary Journey <span className="text-yellow-400">Today</span>
-          </h2>
-          <p className="text-xl text-slate-300 mb-4">
-            Join 500+ successful graduates who transformed their passion into a career.
-          </p>
-          <p className="text-slate-400 mb-10">
-            Diploma &rarr; Certificate &rarr; Short Courses &mdash; choose the path that fits your goals.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button href="/contact?course=apply" variant="primary" size="lg">
-              Apply Now
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Button>
-            <a
-              href="https://wa.me/256777682834"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold rounded-full bg-transparent text-white border-2 border-white/40 transition-all duration-300 transform hover:bg-white/10 hover:border-white hover:scale-105 active:scale-95"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-              </svg>
-              WhatsApp: +256 777 682 834
-            </a>
           </div>
         </div>
       </section>
@@ -654,7 +617,7 @@ function FeatureIcon({ icon }: { icon: string }) {
     ),
     award: (
       <svg className="w-7 h-7 text-red-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138z" />
       </svg>
     ),
     briefcase: (
